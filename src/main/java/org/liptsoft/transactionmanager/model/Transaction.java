@@ -20,10 +20,10 @@ public class Transaction {
     @Column(name = "transaction_id")
     private Long id;
 
-    @Column(name = "category")
+//    @Column(name = "category")
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name="category",
-            joinColumns=  @JoinColumn(name="category_id", referencedColumnName="id"))
+            joinColumns=  @JoinColumn(name="category_id", referencedColumnName="category_id"))
     //inverseJoinColumns= @JoinColumn(name=" employee_id", referencedColumnName="id")
     private List<Category> category;
 

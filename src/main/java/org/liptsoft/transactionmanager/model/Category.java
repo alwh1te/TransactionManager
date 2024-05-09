@@ -35,13 +35,13 @@ public class Category {
     private List<Mcc> mcc = new ArrayList<>();
 
 //    @ElementCollection(targetClass = Category.class, fetch = FetchType.EAGER)
-    @Column(name = "subCategories", nullable = false)
+//    @Column(name = "parent_category_id", nullable = false)
     @CollectionTable(name = "category", joinColumns = @JoinColumn(name = "category_id"))
 //    @JoinColumn(name = "category_id")
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Category> subCategories = new ArrayList<>();
 
-    @Column(name = "transactions", nullable = false)
+//    @Column(name = "ca", nullable = false)
     @CollectionTable(name = "transaction", joinColumns = @JoinColumn(name = "transaction_id"))
 //    @JoinColumn(name = "transaction_id")
     @OneToMany
