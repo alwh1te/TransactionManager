@@ -31,14 +31,22 @@ public class Transaction {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    public String getMonthString() {
+        return months[month - 1];
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", amount=" + amount +
-                ", month=" + month +
+                ", month=" + months[month - 1] +
                 ", category=" + category +
                 '}';
     }
+    private static final String[] months = {"January", "February", "March",
+            "April", "May", "June",
+            "July", "August", "September",
+            "October", "November", "December"};
 }
