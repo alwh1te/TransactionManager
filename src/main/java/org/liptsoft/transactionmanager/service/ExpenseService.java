@@ -9,16 +9,16 @@ import java.util.List;
 
 @Service
 public interface ExpenseService {
-    void add(Category category);
-    void addMcc(Category category, List<Mcc> mcc) ;
-    void addSubCategories(Long mainCategory_id, Category subCategory);
-    void removeCategory(Long category_id);
+    String add(Category category, List<Mcc> mccList);
+    String addMcc(Long category_id, List<Mcc> mcc) ;
+    String addSubCategories(Long mainCategory_id, Category subCategory);
+    String removeCategory(Long category_id);
     List<Category> showCategories();
     List<String> showByMonth(Integer month);
     List<String> showByMonths(Long category_id);
 
     List<Transaction> showAllTransactions();
     List<Transaction> showTransactionsInCategory(Long category_id);
-    void addTransaction(Long category_id, Transaction transaction);
-    void removeTransaction(Long transaction_id);
+    String addTransaction(Long category_id, Transaction transaction);
+    String removeTransaction(Long transaction_id);
 }

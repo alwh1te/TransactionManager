@@ -24,31 +24,47 @@ public class ExpenseServiceImpl implements ExpenseService {
     private MccRepository mccRepository;
 
     @Override
-    public void add(Category category) {
-
+    public String add(Category category, List<Mcc> mccList) {
+        for (Mcc mcc : mccList) {
+            if (mccRepository.existsByMcc(mcc.getMcc()))
+                return "Mcc already reserved for category: "
+                        + mcc.getParentCategory().getName();
+        }
         categoryRepository.save(category);
+        return "added new mcc to: " + category.getName() + " mcc list: " + mccList;
     }
 
     @Override
-    public void addMcc(Category category, List<Mcc> mcc) {
+    public String addMcc(Long category_id, List<Mcc> mcc) {
         for (Mcc mcc1 : mcc) {
-            mcc1.setParentCategory(category);
+            mcc1.setParentCategory(categoryRepository.findById(category_id).orElse(null));
             mccRepository.save(mcc1);
         }
+        return "Added new mcc codes to: "
+                + categoryRepository.findById(category_id).orElse(new Category()).getName() + " mcc codes: " + mcc;
     }
 
     @Override
-    public void addSubCategories(Long mainCategory_id, Category subCategory) {
+    public String addSubCategories(Long mainCategory_id, Category subCategory) {
+        if (!categoryRepository.existsById(mainCategory_id)) {
+            return "Master category doesn't exists!";
+        }
         subCategory.setParentCategory(categoryRepository.findById(mainCategory_id).orElse(null));
         categoryRepository.save(subCategory);
+        return "added new group to: " + subCategory.getParentCategory().getName()
+                + " " + mccRepository.findAllByParentCategoryId(mainCategory_id);
     }
 
 
     @Override
-    public void removeCategory(Long category_id) {
+    public String removeCategory(Long category_id) {
         if (categoryRepository.existsById(category_id)) {
+            Category category = categoryRepository.findById(category_id).orElse(new Category());
+            Category parent = category.getParentCategory();
             categoryRepository.deleteById(category_id);
+            return "Category: " + category.getName() + " removed from: " + (parent == null ? " without category" : " " + parent.getName());
         }
+        return "There is no category with this ID!";
     }
 
     @Override
@@ -106,17 +122,22 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public void addTransaction(Long category_id, Transaction transaction) {
+    public String addTransaction(Long category_id, Transaction transaction) {
         Category category = categoryRepository.findById(category_id).orElse(null);
-        if (category == null) return;
+        if (category == null) return "There is no category with this ID!";
         transaction.setCategory(category);
         transactionRepository.save(transaction);
+        return "Transaction was successfully added";
     }
 
     @Override
-    public void removeTransaction(Long transaction_id) {
+    public String removeTransaction(Long transaction_id) {
         if (transactionRepository.existsById(transaction_id)) {
+            Transaction transaction = transactionRepository.findById(transaction_id).orElse(new Transaction());
+            categoryRepository.deleteById(transaction_id);
             transactionRepository.deleteById(transaction_id);
+            return "Transaction: " + transaction.getName() + " removed from: " + transaction.getCategory().getName();
         }
+        return "There is no transactions with this ID!";
     }
 }

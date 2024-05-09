@@ -20,17 +20,16 @@ public class TransactionController {
 
     @GetMapping("/categories/{category_id}/transactions")
     public List<Transaction> showTransactionsInCategory(@PathVariable Long category_id) {
-//        transactionService.
         return expenseService.showTransactionsInCategory(category_id);
     }
 
     @PostMapping("/categories/{category_id}/transactions")
-    public void addTransactionToCategory(@PathVariable Long category_id, @RequestBody Transaction transaction) {
-        expenseService.addTransaction(category_id, transaction);
+    public String addTransactionToCategory(@PathVariable Long category_id, @RequestBody Transaction transaction) {
+        return expenseService.addTransaction(category_id, transaction);
     }
 
     @DeleteMapping("/transactions/{transaction_id}")
-    public void deleteTransaction(@PathVariable Long transaction_id) {
-        expenseService.removeTransaction(transaction_id);
+    public String deleteTransaction(@PathVariable Long transaction_id) {
+        return expenseService.removeTransaction(transaction_id);
     }
 }

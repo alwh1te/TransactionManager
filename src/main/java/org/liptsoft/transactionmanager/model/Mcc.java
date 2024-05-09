@@ -25,4 +25,9 @@ public class Mcc {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category parentCategory;
+
+    @Override
+    public String toString() {
+        return String.valueOf(mcc);
+    }
 }

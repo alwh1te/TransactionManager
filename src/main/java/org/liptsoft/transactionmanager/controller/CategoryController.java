@@ -1,10 +1,12 @@
 package org.liptsoft.transactionmanager.controller;
 
 import org.liptsoft.transactionmanager.model.Category;
+import org.liptsoft.transactionmanager.model.Mcc;
 import org.liptsoft.transactionmanager.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,24 +21,19 @@ public class CategoryController {
     }
 
     @PostMapping("/categories")
-    public void addCategory(@RequestBody Category category) {
-        expenseService.add(category);
+    public String addCategory(@RequestBody Category category) {
+        return expenseService.add(category, new ArrayList<>());
+    }
+
+    @PutMapping("/categories/{category_id}/mcc")
+    public String addMcc(@PathVariable Long category_id, @RequestBody List<Mcc> mcc) {
+        return expenseService.addMcc(category_id, mcc);
     }
 
     @PostMapping("/categories/{category_id}/subcategories")
-    public void addSubCategory(@PathVariable Long category_id, @RequestBody Category subCategory) {
-        expenseService.addSubCategories(category_id, subCategory);
+    public String addSubCategory(@PathVariable Long category_id, @RequestBody Category subCategory) {
+        return expenseService.addSubCategories(category_id, subCategory);
     }
-
-//    @GetMapping("/transactions")
-//    public String showTransactions(Model model) {
-//        List<Category> categories = categoryService.showCategories();
-////        List<Transaction> transactions = .showTransactions();
-//        model.addAttribute("categories", categories);
-////        model.addAttribute("transactions", transactions);
-//
-//        return "layout";
-//    }
 
     @GetMapping("/categories/transactions")
     public List<String> showTransactionsByMonth(@RequestParam(name = "month") int month) {
@@ -49,7 +46,17 @@ public class CategoryController {
     }
 
     @DeleteMapping("/categories/{category_id}")
-    public void deleteCategory(@PathVariable Long category_id) {
-        expenseService.removeCategory(category_id);
+    public String deleteCategory(@PathVariable Long category_id) {
+        return expenseService.removeCategory(category_id);
     }
+
+//    @GetMapping("/transactions")
+//    public String showTransactions(Model model) {
+//        List<Category> categories = categoryService.showCategories();
+////        List<Transaction> transactions = .showTransactions();
+//        model.addAttribute("categories", categories);
+////        model.addAttribute("transactions", transactions);
+//
+//        return "layout";
+//    }
 }
