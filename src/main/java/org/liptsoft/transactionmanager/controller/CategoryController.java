@@ -49,14 +49,4 @@ public class CategoryController {
     public String deleteCategory(@PathVariable Long category_id) {
         return expenseService.removeCategory(category_id);
     }
-
-//    @GetMapping("/transactions")
-//    public String showTransactions(Model model) {
-//        List<Category> categories = categoryService.showCategories();
-////        List<Transaction> transactions = .showTransactions();
-//        model.addAttribute("categories", categories);
-////        model.addAttribute("transactions", transactions);
-//
-//        return "layout";
-//    }
 }
