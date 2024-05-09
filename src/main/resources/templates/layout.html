@@ -9,6 +9,16 @@
 
 <h1>Categories</h1>
 
+<form th:action="@{/categories}" th:object="${categories}" method="post">
+    <label for="name">Category Name:</label>
+    <input type="text" id="name" name="name" required>
+    <label for="id">(Optional) Parent Category ID:</label>
+    <input type="number" id="id" name="id">
+    <label for="mcc">Mcc code:</label>
+    <input type="number" id="mcc" name="mcc">
+    <button type="submit">Add Category</button>
+</form>
+
 <table border="1">
     <thead>
     <tr>
