@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Setter
 @Getter
 @NoArgsConstructor
@@ -24,14 +22,23 @@ public class Transaction {
     private String name;
 
     @Column(name = "amount")
-    private double amount;
+    private Double amount;
 
     @Column(name = "month")
-    private int month;
+    private Integer month;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    // Геттеры и сеттеры
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", amount=" + amount +
+                ", month=" + month +
+                ", category=" + category +
+                '}';
+    }
 }

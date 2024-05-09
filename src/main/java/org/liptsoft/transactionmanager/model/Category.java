@@ -24,9 +24,16 @@ public class Category {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "parent_id")
     private Category parentCategory;
 
-    // Геттеры и сеттеры
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", parentCategory=" + parentCategory +
+                '}';
+    }
 }
