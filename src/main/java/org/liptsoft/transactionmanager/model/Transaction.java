@@ -6,30 +6,32 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transaction")
+@Table(name = "Transaction")
 @Entity(name = "transaction")
 public class Transaction {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transaction_id")
     private Long id;
 
-    @Column(name = "category")
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name="category",
-            joinColumns=  @JoinColumn(name="category_id", referencedColumnName="id"))
-    //inverseJoinColumns= @JoinColumn(name=" employee_id", referencedColumnName="id")
-    private List<Category> category;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "value")
-    private int value;
+    @Column(name = "amount")
+    private double amount;
 
     @Column(name = "month")
-    private String month;
+    private int month;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    // Геттеры и сеттеры
 }
