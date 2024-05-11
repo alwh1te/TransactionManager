@@ -26,6 +26,10 @@ public class Mcc {
     @JoinColumn(name = "category_id")
     private Category parentCategory;
 
+    public Mcc(Integer mcc) {
+        this.mcc = mcc;
+    }
+
     @Override
     public String toString() {
         return String.valueOf(mcc);

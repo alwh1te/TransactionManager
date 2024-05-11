@@ -24,22 +24,30 @@ public class ExpenseServiceImpl implements ExpenseService {
     private MccRepository mccRepository;
 
     @Override
-    public String add(Category category, List<Mcc> mccList) {
-        for (Mcc mcc : mccList) {
-            if (mccRepository.existsByMcc(mcc.getMcc()))
-                return "Mcc already reserved for category: "
-                        + mcc.getParentCategory().getName();
-        }
-        categoryRepository.save(category);
-        return "added new mcc to: " + category.getName() + " mcc list: " + mccList;
+    public Category add(Category category) {
+        return categoryRepository.save(category);
     }
 
     @Override
-    public String addMcc(Long category_id, List<Mcc> mcc) {
-        for (Mcc mcc1 : mcc) {
-            mcc1.setParentCategory(categoryRepository.findById(category_id).orElse(null));
-            mccRepository.save(mcc1);
+    public Category add(Category category, Mcc mcc) {
+        mcc.setParentCategory(category);
+        mccRepository.save(mcc);
+        return categoryRepository.save(category);
+//        return "added new mcc to: " + category.getName() + " mcc list: " + mccList;
+    }
+
+    @Override
+    public void setParentCategory(Category category, Long parent_id) {
+        if (categoryRepository.existsById(parent_id)) {
+            category.setParentCategory(categoryRepository.findById(parent_id).orElse(null));
         }
+    }
+
+    @Override
+    public String addMcc(Long category_id, Mcc mcc) {
+        Category category = categoryRepository.findById(category_id).orElse(null);
+        mcc.setParentCategory(category);
+        mccRepository.save(mcc);
         return "Added new mcc codes to: "
                 + categoryRepository.findById(category_id).orElse(new Category()).getName() + " mcc codes: " + mcc;
     }
@@ -122,12 +130,13 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public String addTransaction(Long category_id, Transaction transaction) {
+    public Transaction addTransaction(Long category_id, Transaction transaction) {
         Category category = categoryRepository.findById(category_id).orElse(null);
-        if (category == null) return "There is no category with this ID!";
+//        if (category == null) return "There is no category with this ID!";
+        if (category == null) return new Transaction();
         transaction.setCategory(category);
-        transactionRepository.save(transaction);
-        return "Transaction was successfully added";
+        return transactionRepository.save(transaction);
+//        return "Transaction was successfully added";
     }
 
     @Override

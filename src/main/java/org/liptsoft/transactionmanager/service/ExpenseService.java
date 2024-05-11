@@ -9,8 +9,10 @@ import java.util.List;
 
 @Service
 public interface ExpenseService {
-    String add(Category category, List<Mcc> mccList);
-    String addMcc(Long category_id, List<Mcc> mcc) ;
+    Category add(Category category);
+    Category add(Category category, Mcc mccList);
+    void setParentCategory(Category category, Long parent_id);
+    String addMcc(Long category_id, Mcc mcc) ;
     String addSubCategories(Long mainCategory_id, Category subCategory);
     String removeCategory(Long category_id);
     List<Category> showCategories();
@@ -19,6 +21,6 @@ public interface ExpenseService {
 
     List<Transaction> showAllTransactions();
     List<Transaction> showTransactionsInCategory(Long category_id);
-    String addTransaction(Long category_id, Transaction transaction);
+    Transaction addTransaction(Long category_id, Transaction transaction);
     String removeTransaction(Long transaction_id);
 }

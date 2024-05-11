@@ -24,7 +24,7 @@ public class TransactionController {
     }
 
     @PostMapping("/categories/{category_id}/transactions")
-    public String addTransactionToCategory(@PathVariable Long category_id, @RequestBody Transaction transaction) {
+    public Transaction addTransactionToCategory(@PathVariable Long category_id, @RequestBody Transaction transaction) {
         return expenseService.addTransaction(category_id, transaction);
     }
 

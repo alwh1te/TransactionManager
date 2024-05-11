@@ -2,29 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Transaction Manager</title>
-    <meta charset="UTF-8"/>
+<!--    <meta charset="UTF-8"/>-->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css">
 </head>
 <body>
 
 <h1>Categories</h1>
+<h4>Create Category</h4>
+<form action="#" th:action="@{/addCategory}" th:object="${categoryQuery}" method="post">
 
-<form th:action="@{/categories}" th:object="${categories}" method="post">
-    <label for="name">Category Name:</label>
-    <input type="text" id="name" name="name" required>
-    <label for="id">(Optional) Parent Category ID:</label>
-    <input type="number" id="id" name="id">
-    <label for="mcc">Mcc code:</label>
-    <input type="number" id="mcc" name="mcc">
-    <button type="submit">Add Category</button>
+    <div>
+        <label>Category Name:
+            <input type="text" th:field="*{categoryName}" placeholder="Category Name" required/>
+            <input type="number" th:field="*{parentCategory_id}" placeholder="Parent Category ID"/>
+        </label>
+        <input type="submit" value="Submit"/>
+    </div>
 </form>
 
-<table border="1">
+<form action="#" th:action="@{/addMcc}" th:object="${mccQuery}" method="post">
+
+    <div>
+        <label>Add mcc code to category:
+            <input type="number" th:field="*{category_id}" placeholder="Category ID" required/>
+            <input type="number" th:field="*{mcc}" placeholder="Mcc code" required/>
+        </label>
+        <input type="submit" value="Submit"/>
+    </div>
+</form>
+
+
+
+<table class="table table-striped table-bordered">
     <thead>
     <tr>
         <th>ID</th>
         <th>Name</th>
         <th>Parent Category</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(categories)}">
+        <td colspan="5">No Records found. Add some...!</td>
     </tr>
     </thead>
     <tbody>
@@ -36,9 +55,22 @@
     </tbody>
 </table>
 
-<h1>Transactions</h1>
 
-<table border="1">
+<h1>Transactions</h1>
+<h4>Add Transactions</h4>
+
+<form action="#" th:action="@{/addCategory}" th:object="${categoryQuery}" method="post">
+
+    <div>
+        <label>Category Name:
+            <input type="text" th:field="*{categoryName}" placeholder="Category Name" required/>
+            <input type="number" th:field="*{parentCategory_id}" placeholder="Parent Category ID"/>
+        </label>
+        <input type="submit" value="Submit"/>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered">
     <thead>
     <tr>
         <th>ID</th>
@@ -46,6 +78,9 @@
         <th>Amount</th>
         <th>Month</th>
         <th>Category</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(transactions)}">
+        <td colspan="5">No Records found. Add some...!</td>
     </tr>
     </thead>
     <tbody>

@@ -21,12 +21,12 @@ public class CategoryController {
     }
 
     @PostMapping("/categories")
-    public String addCategory(@RequestBody Category category) {
-        return expenseService.add(category, new ArrayList<>());
+    public Category addCategory(@RequestBody Category category) {
+        return expenseService.add(category);
     }
 
     @PutMapping("/categories/{category_id}/mcc")
-    public String addMcc(@PathVariable Long category_id, @RequestBody List<Mcc> mcc) {
+    public String addMcc(@PathVariable Long category_id, @RequestBody Mcc mcc) {
         return expenseService.addMcc(category_id, mcc);
     }
 
