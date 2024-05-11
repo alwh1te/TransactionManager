@@ -2,11 +2,11 @@ package org.liptsoft.transactionmanager.controller;
 
 import org.liptsoft.transactionmanager.model.Category;
 import org.liptsoft.transactionmanager.model.Mcc;
+import org.liptsoft.transactionmanager.model.Transaction;
 import org.liptsoft.transactionmanager.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,12 +36,12 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/transactions")
-    public List<String> showTransactionsByMonth(@RequestParam(name = "month") int month) {
+    public List<Transaction> showTransactionsByMonth(@RequestParam(name = "month") int month) {
         return expenseService.showByMonth(month);
     }
 
     @GetMapping("/categories/transactions/{category_id}")
-    public List<String> showTransactionsByMonths(@PathVariable Long category_id) {
+    public List<Transaction> showTransactionsByMonths(@PathVariable Long category_id) {
         return expenseService.showByMonths(category_id);
     }
 

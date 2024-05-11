@@ -6,43 +6,62 @@ import org.liptsoft.transactionmanager.model.Category;
 import org.liptsoft.transactionmanager.queryTemplates.AddTransactionQuery;
 import org.liptsoft.transactionmanager.queryTemplates.CategoryCreateQuery;
 import org.liptsoft.transactionmanager.model.Mcc;
+import org.liptsoft.transactionmanager.queryTemplates.SortQuery;
 import org.liptsoft.transactionmanager.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.function.Supplier;
+
 @Controller
 public class WebController {
 
     @Autowired
     private ExpenseService expenseService;
+    private Supplier<List<Transaction>> supplier;
 
-    @GetMapping("")
+    @GetMapping("/")
     public String showCategories(Model model) {
+        if (supplier == null) supplier = expenseService::showAllTransactions;
         model.addAttribute("categories", expenseService.showCategories());
-        model.addAttribute("transactions", expenseService.showAllTransactions());
+        model.addAttribute("transactions", expenseService.show(supplier));
         model.addAttribute("categoryQuery", new CategoryCreateQuery());
         model.addAttribute("mccQuery", new AddMccQuery());
+        model.addAttribute("sort", new SortQuery());
         model.addAttribute("transactionQuery", new AddTransactionQuery());
         return "layout";
     }
 
-    @GetMapping("/showByMonth")
-    public String showByMonth(Model model, @ModelAttribute Integer month) {
-        model.addAttribute("showByMonth", expenseService.showByMonth(month));
+    @GetMapping("/showInCategory")
+    public String showInCategory(@ModelAttribute SortQuery query) {
+        if (query.getCategoryId() != null) {
+            this.supplier = () -> expenseService.showTransactionsInCategory(query.getCategoryId());
+        }
         return "redirect:/";
     }
 
-    @GetMapping("/showByMonths")
-    public String showByMonths(Model model, @ModelAttribute Long category_id) {
-        model.addAttribute("showByMonths", expenseService.showByMonths(category_id));
+    @GetMapping("/showAll")
+    public String showAll() {
+        this.supplier = () -> expenseService.showAllTransactions();
         return "redirect:/";
     }
 
-    @GetMapping("/showAllTransactionsInCategory")
-    public String showAllTransactionsInCategory(Model model, @ModelAttribute Long category_id) {
-        model.addAttribute("showAllTransactionsInCategory", expenseService.showTransactionsInCategory(category_id));
+    @GetMapping("/sortByMonth")
+    public String sortByMonth(@ModelAttribute SortQuery query) {
+        if (query.getMonth() != null) {
+            this.supplier = () -> expenseService.showByMonth(query.getMonth());
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping("/sortByMonths")
+    public String sortByMonths(@ModelAttribute SortQuery query) {
+        if (query.getCategoryId() != null) {
+            this.supplier = () -> expenseService.showByMonths(query.getCategoryId());
+        }
         return "redirect:/";
     }
 
@@ -55,7 +74,7 @@ public class WebController {
         return "redirect:/";
     }
 
-    @PutMapping("/addMcc")
+    @PostMapping("/addMcc")
     public String addMcc(@ModelAttribute AddMccQuery query) {
         expenseService.addMcc(query.getCategory_id(), new Mcc(query.getMcc()));
         return "redirect:/";
@@ -70,4 +89,5 @@ public class WebController {
         expenseService.addTransaction(query.getCategory_id(), transaction);
         return "redirect:/";
     }
+
 }

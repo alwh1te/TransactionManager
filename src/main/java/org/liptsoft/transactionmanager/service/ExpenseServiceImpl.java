@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -75,48 +77,23 @@ public class ExpenseServiceImpl implements ExpenseService {
         return "There is no category with this ID!";
     }
 
+    public List<Transaction> show(Supplier<List<Transaction>> operator) {
+        return operator.get();
+    }
+
     @Override
     public List<Category> showCategories() {
         return categoryRepository.findAll();
     }
 
     @Override
-    public List<String> showByMonth(Integer month) {
-        List<Category> allCategories = categoryRepository.findAll();
-        List<String> result = new ArrayList<>();
-        for (Category category : allCategories) {
-            double sum = 0;
-            List<Transaction> transactionsInCategory = transactionRepository.findAllByCategoryIdAndMonth(category.getId(), month);
-            for (Transaction transaction : transactionsInCategory) {
-                sum += transaction.getAmount();
-            }
-            result.add(category.getName() + " amount: " + sum);
-        }
-
-        return result;
+    public List<Transaction> showByMonth(Integer month) {
+        return transactionRepository.findAllByMonth(month);
     }
 
     @Override
-    public List<String> showByMonths(Long category_id) {
-        List<Transaction> transactionsInCategory = transactionRepository.findAllByCategoryId(categoryRepository.findById(category_id).orElse(new Category()).getId());
-        Map<Integer, Double> mapMonthAmount = new LinkedHashMap<>();
-        for (int i = 0; i <= 12; i++) {
-            mapMonthAmount.put(i, 0.0);
-        }
-        for (Transaction transaction : transactionsInCategory) {
-            if (transaction != null) {
-                mapMonthAmount.put(transaction.getMonth(), transaction.getAmount() + mapMonthAmount.get(transaction.getMonth()));
-            }
-        }
-        List<String> result = new ArrayList<>();
-        String[] months = {"January", "February", "March",
-                "April", "May", "June",
-                "July", "August", "September",
-                "October", "November", "December"};
-        for (int i = 1; i <= 12; i++) {
-            result.add(months[i - 1] + " " + mapMonthAmount.get(i));
-        }
-        return result;
+    public List<Transaction> showByMonths(Long category_id) {
+        return transactionRepository.findAllByCategoryId(category_id);
     }
 
     @Override

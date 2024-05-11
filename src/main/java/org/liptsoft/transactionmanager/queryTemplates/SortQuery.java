@@ -7,9 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class AddMccQuery {
-    private Long category_id;
-    private Integer mcc;
+@NoArgsConstructor
+public class SortQuery {
+    private Long categoryId;
+    private Long transactionId = null;
+    private Integer month = null;
 }
