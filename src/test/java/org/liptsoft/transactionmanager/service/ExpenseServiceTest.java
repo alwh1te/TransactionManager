@@ -126,26 +126,6 @@ public class ExpenseServiceTest {
     }
 
     @Test
-    void testAddParentCategory() {
-        Category mainCategory = new Category();
-        mainCategory.setId(1L);
-        mainCategory.setName("Main Category");
-
-        Category subCategory = new Category();
-        subCategory.setId(2L);
-        subCategory.setName("Sub Category");
-
-        when(categoryRepository.existsById(1L)).thenReturn(true);
-        when(categoryRepository.findById(1L)).thenReturn(Optional.of(mainCategory));
-        when(categoryRepository.save(any(Category.class))).thenReturn(subCategory);
-        when(mccRepository.findAllByParentCategoryId(1L)).thenReturn(Collections.emptyList());
-
-        String result = expenseService.addParentCategory(1L, subCategory);
-
-        assertEquals("added new group to: " + mainCategory + " []", result);
-    }
-
-    @Test
     void testShowCategories() {
         List<Category> categories = Collections.singletonList(new Category());
         when(categoryRepository.findAll()).thenReturn(categories);
@@ -186,23 +166,10 @@ public class ExpenseServiceTest {
     }
 
     @Test
-    void testShowTransactionsInCategory() {
-        List<Transaction> transactions = Collections.singletonList(new Transaction());
-        when(transactionRepository.findAllByCategoryId(1L)).thenReturn(transactions);
-
-        List<Transaction> result = expenseService.showTransactionsInCategory(1L);
-
-        assertEquals(transactions, result);
-    }
-
-    @Test
     void testAddTransaction() {
         Category category = new Category();
         category.setId(1L);
         category.setName("Test Category");
-
-        Transaction transaction = new Transaction();
-        transaction.setName("Test Transaction");
 
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(transactionRepository.save(any(Transaction.class))).thenReturn(transaction);

@@ -101,7 +101,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public List<Transaction> showTransactionsInCategory(Long category_id) {
-        return transactionRepository.findAllByCategoryId(category_id);
+        Category category = categoryRepository.findById(category_id).orElse(null);
+        if (category != null) {
+            List<Transaction> result = transactionRepository.findAllByCategoryId(category_id);
+            List<Category> childCategories = categoryRepository.findAllByParentCategoryId(category_id);
+            for (Category childCategory : childCategories) {
+                result.addAll(transactionRepository.findAllByCategoryId(childCategory.getId()));
+            }
+            return result;
+        }
+        return new ArrayList<>();
     }
 
     @Override
