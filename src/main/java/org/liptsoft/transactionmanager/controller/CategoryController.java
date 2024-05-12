@@ -26,13 +26,13 @@ public class CategoryController {
     }
 
     @PutMapping("/categories/{category_id}/mcc")
-    public String addMcc(@PathVariable Long category_id, @RequestBody Mcc mcc) {
+    public Category addMcc(@PathVariable Long category_id, @RequestBody Mcc mcc) {
         return expenseService.addMcc(category_id, mcc);
     }
 
     @PostMapping("/categories/{category_id}/subcategories")
-    public String addSubCategory(@PathVariable Long category_id, @RequestBody Category subCategory) {
-        return expenseService.addSubCategories(category_id, subCategory);
+    public String addParentCategory(@PathVariable Long category_id, @RequestBody Category subCategory) {
+        return expenseService.addParentCategory(category_id, subCategory);
     }
 
     @GetMapping("/categories/transactions")

@@ -40,26 +40,26 @@ public class ExpenseServiceImpl implements ExpenseService {
     public void setParentCategory(Category category, Long parent_id) {
         if (categoryRepository.existsById(parent_id)) {
             category.setParentCategory(categoryRepository.findById(parent_id).orElse(null));
+            categoryRepository.save(category);
         }
     }
 
     @Override
-    public String addMcc(Long category_id, Mcc mcc) {
+    public Category addMcc(Long category_id, Mcc mcc) {
         Category category = categoryRepository.findById(category_id).orElse(null);
         mcc.setParentCategory(category);
         mccRepository.save(mcc);
-        return "Added new mcc codes to: "
-                + categoryRepository.findById(category_id).orElse(new Category()).getName() + " mcc codes: " + mcc;
+        return category;
     }
 
     @Override
-    public String addSubCategories(Long mainCategory_id, Category subCategory) {
+    public String addParentCategory(Long mainCategory_id, Category subCategory) {
         if (!categoryRepository.existsById(mainCategory_id)) {
             return "Master category doesn't exists!";
         }
-        subCategory.setParentCategory(categoryRepository.findById(mainCategory_id).orElse(null));
+        subCategory.setParentCategory(categoryRepository.findById(mainCategory_id).orElse(new Category()));
         categoryRepository.save(subCategory);
-        return "added new group to: " + subCategory.getParentCategory().getName()
+        return "added new group to: " + subCategory.getParentCategory()
                 + " " + mccRepository.findAllByParentCategoryId(mainCategory_id);
     }
 
@@ -118,7 +118,7 @@ public class ExpenseServiceImpl implements ExpenseService {
             Transaction transaction = transactionRepository.findById(transaction_id).orElse(new Transaction());
             categoryRepository.deleteById(transaction_id);
             transactionRepository.deleteById(transaction_id);
-            return "Transaction: " + transaction.getName() + " removed from: " + transaction.getCategory().getName();
+            return "Transaction: " + transaction.getName() + " removed";
         }
         return "There is no transactions with this ID!";
     }
