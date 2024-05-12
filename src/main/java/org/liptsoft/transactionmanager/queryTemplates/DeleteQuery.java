@@ -7,10 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class SortQuery {
-    private Long categoryId = null;
-    private Long transactionId = null;
-    private Integer month = null;
+@AllArgsConstructor
+public class DeleteQuery {
+    private Long id = null;
 }

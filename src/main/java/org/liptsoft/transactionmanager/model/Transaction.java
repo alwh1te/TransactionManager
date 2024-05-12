@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "Transaction")
-@Entity(name = "transaction")
+@Entity
+@Table(name = "transaction")
 public class Transaction {
     @Id
     @Column(name = "id")

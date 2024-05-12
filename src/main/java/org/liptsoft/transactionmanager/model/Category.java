@@ -6,15 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "category")
-@Table(name = "Category")
+@Entity
+@Table(name = "category")
 public class Category {
     @Id
     @Column(name = "id")

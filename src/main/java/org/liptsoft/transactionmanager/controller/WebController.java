@@ -1,12 +1,9 @@
 package org.liptsoft.transactionmanager.controller;
 
 import org.liptsoft.transactionmanager.model.Transaction;
-import org.liptsoft.transactionmanager.queryTemplates.AddMccQuery;
+import org.liptsoft.transactionmanager.queryTemplates.*;
 import org.liptsoft.transactionmanager.model.Category;
-import org.liptsoft.transactionmanager.queryTemplates.AddTransactionQuery;
-import org.liptsoft.transactionmanager.queryTemplates.CategoryCreateQuery;
 import org.liptsoft.transactionmanager.model.Mcc;
-import org.liptsoft.transactionmanager.queryTemplates.SortQuery;
 import org.liptsoft.transactionmanager.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +29,8 @@ public class WebController {
         model.addAttribute("mccQuery", new AddMccQuery());
         model.addAttribute("sort", new SortQuery());
         model.addAttribute("transactionQuery", new AddTransactionQuery());
+        model.addAttribute("categoryId", new DeleteQuery());
+        model.addAttribute("transactionId", new DeleteQuery());
         return "layout";
     }
 
@@ -70,7 +69,8 @@ public class WebController {
         Category category = new Category();
         category.setName(categoryQuery.getCategoryName());
         category = expenseService.add(category);
-        expenseService.setParentCategory(category, categoryQuery.getParentCategory_id());
+        if (categoryQuery.getParentCategory_id() != null)
+            expenseService.setParentCategory(category, categoryQuery.getParentCategory_id());
         return "redirect:/";
     }
 
@@ -90,4 +90,15 @@ public class WebController {
         return "redirect:/";
     }
 
+    @PostMapping("/deleteCategory")
+    public String deleteCategory(@ModelAttribute DeleteQuery categoryId) {
+        expenseService.removeCategory(categoryId.getId());
+        return "redirect:/";
+    }
+
+    @PostMapping("/deleteTransaction")
+    public String deleteTransaction(@ModelAttribute DeleteQuery transactionId) {
+        expenseService.removeTransaction(transactionId.getId());
+        return "redirect:/";
+    }
 }

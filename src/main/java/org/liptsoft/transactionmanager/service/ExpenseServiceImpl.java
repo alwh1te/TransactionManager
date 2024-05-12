@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
@@ -35,7 +34,6 @@ public class ExpenseServiceImpl implements ExpenseService {
         mcc.setParentCategory(category);
         mccRepository.save(mcc);
         return categoryRepository.save(category);
-//        return "added new mcc to: " + category.getName() + " mcc list: " + mccList;
     }
 
     @Override
@@ -109,11 +107,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public Transaction addTransaction(Long category_id, Transaction transaction) {
         Category category = categoryRepository.findById(category_id).orElse(null);
-//        if (category == null) return "There is no category with this ID!";
         if (category == null) return new Transaction();
         transaction.setCategory(category);
         return transactionRepository.save(transaction);
-//        return "Transaction was successfully added";
     }
 
     @Override
